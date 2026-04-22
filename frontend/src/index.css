@@ -1,8 +1,43 @@
-/* Global Tailwind layers and base style defaults for SmartSeason. */
+/* Global Design System for SmartSeason */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-slate-50 text-slate-900;
+:root {
+  --primary: #1a4d2e;
+  --primary-light: #4f6f52;
+  --secondary: #e9edc9;
+  --accent: #ccd5ae;
+  --glass: rgba(255, 255, 255, 0.75);
+}
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 selection:bg-emerald-100;
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', sans-serif;
+  }
+}
+
+@layer components {
+  .glass-effect {
+    @apply border border-white/20 bg-white/70 backdrop-blur-lg;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-900/5;
+  }
+
+  .btn-premium {
+    @apply relative overflow-hidden rounded-lg bg-[#1a4d2e] px-4 py-2 text-sm font-medium text-white transition-all hover:bg-[#123620] hover:shadow-lg active:scale-95;
+  }
+}
+
+.gradient-bg {
+  background: radial-gradient(circle at top right, #f8fafc, #e2e8f0);
 }

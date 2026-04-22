@@ -67,7 +67,10 @@ const createField = async (req, res, next) => {
       [name, crop_type, planting_date, stage, agent_id]
     );
 
-    return res.status(201).json(result.rows[0]);
+    const field = result.rows[0];
+    const enrichedField = enrichFieldWithStatus(field, null); // Last update date is null for new fields
+
+    return res.status(201).json(enrichedField);
   } catch (error) {
     return next(error);
   }

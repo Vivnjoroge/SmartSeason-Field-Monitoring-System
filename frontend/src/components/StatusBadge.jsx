@@ -1,15 +1,15 @@
-// Status badge component with Tailwind color variants per field health.
+// Status badge component with refined colors and borders.
 const STATUS_STYLES = {
-  Active: 'bg-green-100 text-green-800',
-  'At Risk': 'bg-yellow-100 text-yellow-800',
-  Completed: 'bg-gray-100 text-gray-600',
+  Active: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+  'At Risk': 'bg-amber-50 text-amber-700 border-amber-200',
+  Completed: 'bg-slate-50 text-slate-600 border-slate-200',
 };
 
 const StatusBadge = ({ status }) => {
-  const classes = STATUS_STYLES[status] || 'bg-gray-100 text-gray-600';
+  const classes = STATUS_STYLES[status] || 'bg-slate-50 text-slate-600 border-slate-200';
 
   return (
-    <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ${classes}`}>
+    <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold tracking-tight ${classes}`}>
       {status}
     </span>
   );

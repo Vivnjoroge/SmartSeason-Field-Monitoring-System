@@ -3,6 +3,10 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 
+import { ArrowLeft, Plus, Sprout, Calendar, User as UserIcon, Activity, RefreshCw } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
+
 const CreateField = () => {
   const navigate = useNavigate();
   const [agents, setAgents] = useState([]);
@@ -22,7 +26,7 @@ const CreateField = () => {
         const response = await api.get('/users');
         setAgents(response.data);
       } catch (apiError) {
-        setError(apiError.response?.data?.message || 'Failed to load agents');
+        setError(apiError.response?.data?.message || 'Failed to initialize agent registry');
       }
     };
 
@@ -47,97 +51,165 @@ const CreateField = () => {
 
       navigate('/dashboard/admin');
     } catch (apiError) {
-      setError(apiError.response?.data?.message || 'Failed to create field');
+      setError(apiError.response?.data?.message || 'Field initialization protocols failed');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="mx-auto max-w-2xl rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-      <h1 className="mb-6 text-2xl font-bold text-slate-900">Create Field</h1>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <InputField label="Field Name" name="name" value={formData.name} onChange={handleChange} />
-
-        <InputField label="Crop Type" name="crop_type" value={formData.crop_type} onChange={handleChange} />
-
-        <InputField
-          label="Planting Date"
-          name="planting_date"
-          type="date"
-          value={formData.planting_date}
-          onChange={handleChange}
-        />
-
-        <div>
-          <label htmlFor="stage" className="mb-1 block text-sm font-medium text-slate-700">
-            Stage
-          </label>
-          <select
-            id="stage"
-            name="stage"
-            value={formData.stage}
-            onChange={handleChange}
-            className="w-full rounded-md border border-slate-300 px-3 py-2"
-          >
-            <option value="Planted">Planted</option>
-            <option value="Growing">Growing</option>
-            <option value="Ready">Ready</option>
-            <option value="Harvested">Harvested</option>
-          </select>
-        </div>
-
-        <div>
-          <label htmlFor="agent_id" className="mb-1 block text-sm font-medium text-slate-700">
-            Assign Agent
-          </label>
-          <select
-            id="agent_id"
-            name="agent_id"
-            value={formData.agent_id}
-            onChange={handleChange}
-            required
-            className="w-full rounded-md border border-slate-300 px-3 py-2"
-          >
-            <option value="">Select an agent</option>
-            {agents.map((agent) => (
-              <option key={agent.id} value={agent.id}>
-                {agent.name} ({agent.email})
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {error ? <p className="text-sm text-red-600">{error}</p> : null}
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-50"
+    <motion.div 
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="mx-auto max-w-2xl pb-12"
+    >
+      <div className="mb-10 flex items-center gap-6">
+        <Link 
+          to="/" 
+          className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-slate-400 shadow-soft transition-all hover:bg-forest-50 hover:text-forest-600 active:scale-90"
         >
-          {loading ? 'Creating...' : 'Create Field'}
-        </button>
-      </form>
-    </div>
+          <ArrowLeft size={24} />
+        </Link>
+        <div>
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">Initialize Field</h1>
+          <p className="mt-1 text-xs font-bold uppercase tracking-widest text-slate-400">Agricultural Asset Registration</p>
+        </div>
+      </div>
+
+      <div className="rounded-[2.5rem] border border-slate-100 bg-white p-10 shadow-soft">
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+            <InputField 
+              label="Field Identifier" 
+              name="name" 
+              placeholder="e.g. North Plateau A1"
+              value={formData.name} 
+              onChange={handleChange} 
+              icon={<Plus size={18} />}
+            />
+
+            <InputField 
+              label="Crop Classification" 
+              name="crop_type" 
+              placeholder="e.g. Winter Wheat"
+              value={formData.crop_type} 
+              onChange={handleChange} 
+              icon={<Sprout size={18} />}
+            />
+
+            <InputField
+              label="Initial Planting"
+              name="planting_date"
+              type="date"
+              value={formData.planting_date}
+              onChange={handleChange}
+              icon={<Calendar size={18} />}
+            />
+
+            <div className="space-y-2">
+              <label htmlFor="stage" className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+                Current Lifecycle
+              </label>
+              <div className="relative group">
+                <select
+                  id="stage"
+                  name="stage"
+                  value={formData.stage}
+                  onChange={handleChange}
+                  className="w-full appearance-none rounded-2xl border-none bg-slate-100/50 px-5 py-3.5 text-sm font-bold text-slate-700 outline-none ring-forest-500/10 transition-all focus:bg-white focus:ring-4"
+                >
+                  <option value="Planted">Planted</option>
+                  <option value="Growing">Growing</option>
+                  <option value="Ready">Ready</option>
+                  <option value="Harvested">Harvested</option>
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-5 text-slate-400">
+                   <Activity size={18} />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="agent_id" className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+              Assign Field Custodian
+            </label>
+            <div className="relative group">
+              <select
+                id="agent_id"
+                name="agent_id"
+                value={formData.agent_id}
+                onChange={handleChange}
+                required
+                className="w-full appearance-none rounded-2xl border-none bg-slate-100/50 px-5 py-3.5 text-sm font-bold text-slate-700 outline-none ring-forest-500/10 transition-all focus:bg-white focus:ring-4"
+              >
+                <option value="">Select an authorized agent</option>
+                {agents.map((agent) => (
+                  <option key={agent.id} value={agent.id}>
+                    {agent.name} — {agent.email}
+                  </option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-5 text-slate-400">
+                 <UserIcon size={18} />
+              </div>
+            </div>
+          </div>
+
+          <AnimatePresence>
+            {error && (
+              <motion.div 
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="rounded-xl bg-red-400/10 p-4 text-xs font-bold text-red-400 border border-red-400/20 text-center"
+              >
+                {error}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="group flex w-full items-center justify-center gap-3 rounded-[1.5rem] bg-forest-800 py-4 text-sm font-bold text-white shadow-soft transition-all hover:bg-forest-700 active:scale-95 disabled:bg-slate-100 disabled:text-slate-300"
+          >
+            {loading ? (
+              <RefreshCw size={22} className="animate-spin" />
+            ) : (
+              <>
+                Register Operational Asset
+                <ArrowLeft size={20} className="rotate-180 transition-transform group-hover:translate-x-1" />
+              </>
+            )}
+          </button>
+        </form>
+      </div>
+    </motion.div>
   );
 };
 
-const InputField = ({ label, name, value, onChange, type = 'text' }) => {
+const InputField = ({ label, name, value, onChange, placeholder, icon, type = 'text' }) => {
   return (
-    <div>
-      <label htmlFor={name} className="mb-1 block text-sm font-medium text-slate-700">
+    <div className="space-y-2">
+      <label htmlFor={name} className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
         {label}
       </label>
-      <input
-        id={name}
-        name={name}
-        type={type}
-        value={value}
-        onChange={onChange}
-        required
-        className="w-full rounded-md border border-slate-300 px-3 py-2"
-      />
+      <div className="relative group">
+         <span className="absolute inset-y-0 left-0 flex items-center pl-5 text-slate-400 group-focus-within:text-forest-600 transition-colors">
+            {icon}
+         </span>
+         <input
+            id={name}
+            name={name}
+            type={type}
+            value={value}
+            onChange={onChange}
+            required
+            placeholder={placeholder}
+            className="w-full rounded-2xl border-none bg-slate-100/50 py-3.5 pl-12 pr-4 text-sm font-bold text-slate-700 outline-none ring-forest-500/10 transition-all placeholder:text-slate-400 focus:bg-white focus:ring-4"
+         />
+      </div>
     </div>
   );
 };

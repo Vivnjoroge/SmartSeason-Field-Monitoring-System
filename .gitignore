@@ -25,3 +25,18 @@ pnpm-debug.log*
 Thumbs.db
 .vscode/
 .idea/
+
+# UI Previews & Artifacts
+*.png
+*.jpg
+*.jpeg
+*.svg
+login_preview.png
+dashboard_preview.png
+admin_sidebar_preview.png
+agent_table_preview.png
+
+# Random temp/token files
+token.txt
+temp/
+/tmp/

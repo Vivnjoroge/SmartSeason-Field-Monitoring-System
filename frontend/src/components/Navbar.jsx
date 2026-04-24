@@ -14,39 +14,45 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-white/20 bg-white/70 backdrop-blur-md">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+    <nav className="sticky top-0 z-50 border-b border-slate-100 bg-white/70 backdrop-blur-xl">
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-12">
         <motion.div 
-          initial={{ opacity: 0, x: -20 }}
+          initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}
-          className="flex items-center gap-2 text-xl font-bold text-[#1a4d2e]"
+          className="flex items-center gap-3"
+          onClick={() => navigate('/')}
         >
-          <Sprout className="h-6 w-6 text-emerald-600" />
-          <span className="tracking-tight">SmartSeason</span>
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-forest-900 text-white shadow-soft">
+            <Sprout size={24} />
+          </div>
+          <div className="flex flex-col cursor-pointer">
+            <span className="text-xl font-bold tracking-tight text-slate-900 font-outfit leading-none">SmartSeason</span>
+            <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-forest-600">Premium Agri-Care</span>
+          </div>
         </motion.div>
 
         <motion.div 
-          initial={{ opacity: 0, x: 20 }}
+          initial={{ opacity: 0, x: 10 }}
           animate={{ opacity: 1, x: 0 }}
-          className="flex items-center gap-6"
+          className="flex items-center gap-8"
         >
-          <div className="hidden items-center gap-2 sm:flex">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
-              <User size={16} />
+          <div className="hidden items-center gap-4 border-r border-slate-100 pr-8 sm:flex">
+            <div className="text-right">
+              <p className="text-sm font-bold text-slate-900 font-outfit">{user?.name}</p>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-forest-500">{user?.role}</p>
             </div>
-            <div className="flex flex-col">
-              <span className="text-sm font-semibold text-slate-900">{user?.name}</span>
-              <span className="text-[10px] uppercase tracking-wider text-slate-500">{user?.role}</span>
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 text-slate-400 ring-2 ring-white shadow-soft">
+              <User size={20} />
             </div>
           </div>
 
           <button
             type="button"
             onClick={handleLogout}
-            className="flex items-center gap-2 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-slate-700 hover:shadow-lg active:scale-95"
+            className="group flex h-11 items-center gap-2 rounded-xl bg-slate-50 px-5 text-sm font-bold text-slate-600 transition-all hover:bg-forest-50 hover:text-forest-700 active:scale-95"
           >
-            <LogOut size={16} />
-            <span className="hidden sm:inline">Logout</span>
+            <LogOut size={18} className="transition-transform group-hover:translate-x-1" />
+            <span className="hidden sm:inline">Terminate</span>
           </button>
         </motion.div>
       </div>

@@ -1,43 +1,68 @@
-/* Global Design System for SmartSeason */
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+/* Global Design System for SmartSeason — Forest Edition */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --primary: #1a4d2e;
-  --primary-light: #4f6f52;
-  --secondary: #e9edc9;
-  --accent: #ccd5ae;
-  --glass: rgba(255, 255, 255, 0.75);
+  --forest-900: #1a3528;
+  --forest-600: #2d6343;
+  --forest-50:  #f1f8f3;
+  --cream-100:  #faf7f1;
+  --shadow-soft: 0 2px 15px -3px rgba(0,0,0,0.07), 0 4px 6px -2px rgba(0,0,0,0.05);
+  --shadow-premium: 0 20px 25px -5px rgba(0,0,0,0.10), 0 10px 10px -5px rgba(0,0,0,0.04);
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   body {
-    @apply bg-slate-50 text-slate-900 selection:bg-emerald-100;
-    font-family: 'Inter', sans-serif;
+    @apply bg-slate-50 text-slate-900;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  ::selection {
+    background: #bcd9c5;
+    color: #1a3528;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
   }
+
+  /* Refined scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #bcd9c5; border-radius: 99px; }
+  ::-webkit-scrollbar-thumb:hover { background: #2d6343; }
 }
 
 @layer components {
-  .glass-effect {
-    @apply border border-white/20 bg-white/70 backdrop-blur-lg;
+  .glass-card {
+    @apply rounded-[2rem] border border-slate-100 bg-white/80 shadow-soft backdrop-blur-sm;
   }
 
   .card-hover {
-    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-900/5;
+    @apply transition-all duration-300 hover:shadow-premium hover:-translate-y-0.5;
   }
 
-  .btn-premium {
-    @apply relative overflow-hidden rounded-lg bg-[#1a4d2e] px-4 py-2 text-sm font-medium text-white transition-all hover:bg-[#123620] hover:shadow-lg active:scale-95;
+  .btn-forest {
+    @apply flex items-center gap-2 rounded-xl bg-forest-800 px-5 py-2.5 text-sm font-bold text-white
+           shadow-soft transition-all hover:bg-forest-700 hover:shadow-premium active:scale-95;
   }
-}
 
-.gradient-bg {
-  background: radial-gradient(circle at top right, #f8fafc, #e2e8f0);
+  .input-clean {
+    @apply w-full rounded-2xl border-none bg-slate-100/60 px-5 py-3.5 text-sm font-medium
+           text-slate-700 outline-none ring-forest-500/10 transition-all placeholder:text-slate-400
+           focus:bg-white focus:ring-4;
+  }
+
+  .label-clean {
+    @apply ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400;
+  }
 }

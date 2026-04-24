@@ -1,6 +1,6 @@
 // Application router and protected layout wiring for SmartSeason frontend.
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom';
-import Navbar from './components/Navbar';
+import Sidebar from './components/Sidebar';
 import { useAuth } from './context/AuthContext';
 import AdminDashboard from './pages/AdminDashboard';
 import AgentDashboard from './pages/AgentDashboard';
@@ -21,9 +21,12 @@ const RoleRedirect = () => {
 
 const AppLayout = () => {
   return (
-    <div className="min-h-screen bg-slate-50">
-      <Navbar />
-      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+    <div
+      className="flex min-h-screen"
+      style={{ background: 'radial-gradient(ellipse at top left, #f1f8f3 0%, #f8fafc 50%, #f1f5f9 100%)' }}
+    >
+      <Sidebar />
+      <main className="flex-1 overflow-y-auto px-8 py-10 lg:px-12 lg:py-14">
         <Outlet />
       </main>
     </div>

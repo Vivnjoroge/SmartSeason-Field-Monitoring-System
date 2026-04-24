@@ -4,16 +4,17 @@ import { Link } from 'react-router-dom';
 import api from '../api/axios';
 import StatusBadge from '../components/StatusBadge';
 import { motion } from 'framer-motion';
-import { 
-  LayoutDashboard, 
-  Plus, 
-  Eye, 
-  CheckCircle2, 
-  AlertTriangle, 
-  Layers, 
+import {
+  LayoutDashboard,
+  Plus,
+  Eye,
+  CheckCircle2,
+  AlertTriangle,
+  Layers,
   Calendar,
   User as UserIcon,
-  Search
+  Search,
+  Sprout
 } from 'lucide-react';
 
 const AdminDashboard = () => {
@@ -40,7 +41,7 @@ const AdminDashboard = () => {
   }, []);
 
   const filteredFields = useMemo(() => {
-    return fields.filter(field => 
+    return fields.filter(field =>
       field.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       field.crop_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (field.agent_name && field.agent_name.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -59,158 +60,165 @@ const AdminDashboard = () => {
   if (loading) {
     return (
       <div className="flex h-64 items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent"></div>
+        <div className="h-10 w-10 animate-spin rounded-full border-2 border-forest-600 border-t-transparent"></div>
       </div>
     );
   }
 
   const containerVariants = {
-    hidden: { opacity: 0 },
+    hidden: { opacity: 0, y: 10 },
     visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 }
+      opacity: 1, y: 0,
+      transition: { staggerChildren: 0.05, ease: "easeOut", duration: 0.4 }
     }
   };
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: { y: 0, opacity: 1 }
+    hidden: { opacity: 0, scale: 0.98 },
+    visible: { opacity: 1, scale: 1 }
   };
 
   return (
-    <motion.div 
+    <motion.div
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="space-y-8"
+      className="pb-12"
     >
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      {/* Executive Header */}
+      <div className="mb-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900 font-outfit">Admin Dashboard</h1>
-          <p className="text-slate-500">Overview of all active monitoring fields.</p>
+          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 leading-tight">Project Overview</h1>
+          <p className="mt-2 text-slate-500 font-medium tracking-tight">Real-time status of all digital agricultural assets.</p>
         </div>
-        <Link
-          to="/fields/new"
-          className="btn-premium group flex items-center justify-center gap-2"
-        >
-          <Plus size={18} className="transition-transform group-hover:rotate-90" />
-          Add New Field
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link
+            to="/fields/new"
+            className="flex h-11 items-center gap-2 rounded-xl bg-forest-800 px-6 text-sm font-semibold text-white shadow-soft transition-all hover:bg-forest-700 hover:shadow-premium active:scale-95"
+          >
+            <Plus size={18} />
+            Initialize Field
+          </Link>
+        </div>
       </div>
 
-      <motion.div variants={containerVariants} className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <SummaryCard 
-          label="Total Fields" 
-          value={summary.total} 
-          icon={<Layers size={24} />} 
-          color="bg-blue-500" 
+      {/* Modern Insight Cards */}
+      <div className="mb-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <InsightCard
+          label="Total Managed"
+          value={summary.total}
+          icon={<Layers size={20} />}
+          trend="All Fields"
+          color="text-slate-600"
+          bg="bg-slate-100"
           variants={itemVariants}
         />
-        <SummaryCard 
-          label="Active" 
-          value={summary.active} 
-          icon={<LayoutDashboard size={24} />} 
-          color="bg-emerald-500" 
+        <InsightCard
+          label="Optimal Status"
+          value={summary.active}
+          icon={<CheckCircle2 size={20} />}
+          trend="Progressing"
+          color="text-forest-600"
+          bg="bg-forest-50"
           variants={itemVariants}
         />
-        <SummaryCard 
-          label="At Risk" 
-          value={summary.atRisk} 
-          icon={<AlertTriangle size={24} />} 
-          color="bg-amber-500" 
+        <InsightCard
+          label="Attention Required"
+          value={summary.atRisk}
+          icon={<AlertTriangle size={20} />}
+          trend="Delayed"
+          color="text-amber-600"
+          bg="bg-amber-50"
           variants={itemVariants}
         />
-        <SummaryCard 
-          label="Completed" 
-          value={summary.completed} 
-          icon={<CheckCircle2 size={24} />} 
-          color="bg-slate-500" 
+        <InsightCard
+          label="Harvested"
+          value={summary.completed}
+          icon={<LayoutDashboard size={20} />}
+          trend="Lifecycle End"
+          color="text-blue-600"
+          bg="bg-blue-50"
           variants={itemVariants}
         />
-      </motion.div>
+      </div>
 
-      <motion.div variants={itemVariants} className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold text-slate-900 font-outfit">Field Inventory</h2>
-          <div className="relative">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+      {/* Simplified Inventory */}
+      <motion.div variants={itemVariants} className="space-y-6">
+        <div className="flex items-center justify-between px-2">
+          <h2 className="text-2xl font-bold text-slate-900">Inventory Matrix</h2>
+          <div className="relative group">
+            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 group-focus-within:text-forest-600 transition-colors">
               <Search size={16} />
             </span>
-            <input 
+            <input
               type="text"
-              placeholder="Search fields, crops..."
+              placeholder="Search matrix..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="rounded-xl border border-slate-200 bg-white py-2 pl-9 pr-4 text-sm outline-none transition-all focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 w-64"
+              className="w-64 rounded-xl border-none bg-slate-100/50 py-2.5 pl-10 pr-4 text-sm font-medium outline-none transition-all placeholder:text-slate-400 focus:bg-white focus:ring-4 focus:ring-forest-500/10"
             />
           </div>
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-slate-200 text-sm">
-              <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
-                <tr>
-                  <th className="px-6 py-4">Field Name</th>
-                  <th className="px-6 py-4">Crop Detail</th>
-                  <th className="px-6 py-4">Stage</th>
-                  <th className="px-6 py-4">Status</th>
-                  <th className="px-6 py-4">Assigned Agent</th>
-                  <th className="px-6 py-4">Planting Date</th>
-                  <th className="px-6 py-4 text-right">Actions</th>
+        <div className="overflow-hidden rounded-[2rem] border border-slate-100 bg-white/50 shadow-soft backdrop-blur-sm">
+          <table className="min-w-full text-left">
+            <thead className="bg-slate-50/50 text-[10px] font-bold uppercase tracking-[0.1em] text-slate-400">
+              <tr>
+                <th className="px-8 py-5">Field Identity</th>
+                <th className="px-8 py-5">Classification</th>
+                <th className="px-8 py-5">Stage</th>
+                <th className="px-8 py-5">Operational Status</th>
+                <th className="px-8 py-5">Custodian</th>
+                <th className="px-8 py-5 text-right">Details</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-50">
+              {filteredFields.map((field) => (
+                <tr key={field.id} className="group transition-colors hover:bg-white">
+                  <td className="px-8 py-6">
+                    <div className="font-bold text-slate-900">{field.name}</div>
+                    <div className="text-[10px] text-slate-400">ID: {field.id.toString().padStart(4, '0')}</div>
+                  </td>
+                  <td className="px-8 py-6 text-slate-600">
+                    <div className="flex items-center gap-2">
+                      <Sprout size={14} className="text-forest-500" />
+                      {field.crop_type}
+                    </div>
+                  </td>
+                  <td className="px-8 py-6">
+                    <span className="text-xs font-semibold text-slate-500">{field.stage}</span>
+                  </td>
+                  <td className="px-8 py-6">
+                    <StatusBadge status={field.status} />
+                  </td>
+                  <td className="px-8 py-6">
+                    <div className="flex items-center gap-2 text-slate-600">
+                      <div className="h-6 w-6 rounded-full bg-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-500">
+                        {field.agent_name ? field.agent_name.charAt(0) : '?'}
+                      </div>
+                      <span className="text-xs font-medium">{field.agent_name || 'Pending'}</span>
+                    </div>
+                  </td>
+                  <td className="px-8 py-6 text-right">
+                    <Link
+                      to={`/fields/${field.id}`}
+                      className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-slate-50 text-slate-400 transition-all hover:bg-forest-50 hover:text-forest-600"
+                    >
+                      <Eye size={16} />
+                    </Link>
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 italic-none">
-                {filteredFields.map((field) => (
-                  <tr key={field.id} className="group transition-colors hover:bg-slate-50/80">
-                    <td className="px-6 py-4">
-                      <div className="font-semibold text-slate-900">{field.name}</div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2 text-slate-600">
-                        <Sprout size={14} className="text-emerald-500" />
-                        {field.crop_type}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="text-slate-600">{field.stage}</span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <StatusBadge status={field.status} />
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2 text-slate-600">
-                        <UserIcon size={14} className="text-slate-400" />
-                        {field.agent_name || <span className="text-slate-400 italic">Unassigned</span>}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2 text-slate-600">
-                        <Calendar size={14} className="text-slate-400" />
-                        {new Date(field.planting_date).toLocaleDateString()}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <Link
-                        to={`/fields/${field.id}`}
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 transition-all hover:bg-slate-50 hover:text-emerald-600 group-hover:border-emerald-200"
-                      >
-                        <Eye size={14} />
-                        View
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
+
           {filteredFields.length === 0 && (
-            <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="rounded-full bg-slate-100 p-4 text-slate-400">
+            <div className="flex flex-col items-center justify-center py-20 text-center">
+              <div className="h-16 w-16 rounded-3xl bg-slate-50 flex items-center justify-center text-slate-300">
                 <Search size={32} />
               </div>
-              <h3 className="mt-4 font-semibold text-slate-900">No fields found</h3>
-              <p className="text-sm text-slate-500">Try adjusting your search criteria.</p>
+              <h3 className="mt-4 font-bold text-slate-900 text-lg">No Results found</h3>
+              <p className="text-sm text-slate-400">Try adjusting your filter or search query.</p>
             </div>
           )}
         </div>
@@ -219,22 +227,23 @@ const AdminDashboard = () => {
   );
 };
 
-const SummaryCard = ({ label, value, icon, color, variants }) => {
+const InsightCard = ({ label, value, icon, trend, color, bg, variants }) => {
   return (
-    <motion.div 
+    <motion.div
       variants={variants}
-      className="card-hover group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+      className="group relative rounded-[2rem] border border-slate-100 bg-white p-7 shadow-soft transition-all hover:shadow-premium"
     >
-      <div className={`absolute -right-4 -top-4 h-24 w-24 rounded-full opacity-5 ${color}`} />
-      <div className="flex items-center justify-between">
+      <div className="flex items-start justify-between">
         <div>
-          <p className="text-xs font-bold uppercase tracking-widest text-slate-400">{label}</p>
-          <p className="mt-2 text-3xl font-bold text-slate-900 font-outfit">{value}</p>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">{label}</p>
+          <p className="text-3xl font-bold text-slate-900">{value}</p>
+          <p className="mt-2 text-[10px] font-bold text-slate-400 flex items-center gap-1">
+            <span className={`h-1 w-1 rounded-full ${bg} ${color}`}></span>
+            {trend}
+          </p>
         </div>
-        <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${color} bg-opacity-10 text-slate-900`}>
-          <div className={`text-white p-2 rounded-lg ${color}`}>
-            {icon}
-          </div>
+        <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${bg} ${color}`}>
+          {icon}
         </div>
       </div>
     </motion.div>
@@ -242,3 +251,5 @@ const SummaryCard = ({ label, value, icon, color, variants }) => {
 };
 
 export default AdminDashboard;
+
+

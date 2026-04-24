@@ -1,13 +1,12 @@
 // Express server entry point for SmartSeason backend APIs.
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
-const dotenv = require('dotenv');
 
 const authRoutes = require('./src/routes/auth');
 const fieldRoutes = require('./src/routes/fields');
 const userRoutes = require('./src/routes/users');
-
-dotenv.config();
 
 const app = express();
 

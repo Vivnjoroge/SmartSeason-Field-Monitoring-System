@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
-import { motion } from 'framer-motion';
-import { Sprout, Mail, Lock, ArrowRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Sprout, Mail, Lock, ArrowRight, RefreshCw } from 'lucide-react';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -34,42 +34,47 @@ const Login = () => {
         navigate('/dashboard/agent');
       }
     } catch (apiError) {
-      setError(apiError.response?.data?.message || 'Login failed');
+      setError(apiError.response?.data?.message || 'Information mismatch. Please verify credentials.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-900 px-4">
-      {/* Background Image with Overlay */}
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 p-6">
+      {/* Dynamic Background */}
       <div 
-        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-60 mix-blend-overlay"
-        style={{ backgroundImage: 'url("/home/ubuntu/.gemini/antigravity/brain/ef7365fd-7588-468b-9251-71fbcaa9724d/login_bg_agricultural_field_1776859204687.png")' }}
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-opacity duration-[2s]"
+        style={{ backgroundImage: 'url("/home/ubuntu/.gemini/antigravity/brain/06bc7eff-800c-45b8-aaf5-20df8019f890/lush_modern_agri_field_1777023725141.png")' }}
       />
-      <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#1a4d2e]/40 to-slate-900/90" />
+      <div className="absolute inset-0 z-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+      <div className="absolute inset-0 z-0 bg-forest-900/10 mix-blend-color" />
 
       <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="relative z-10 w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-white/10 p-8 shadow-2xl backdrop-blur-xl"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="relative z-10 w-full max-w-[440px] overflow-hidden rounded-[2.5rem] border border-white/10 bg-slate-900/40 p-10 shadow-premium backdrop-blur-2xl"
       >
-        <div className="mb-8 flex flex-col items-center text-center">
-          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/20 text-emerald-400">
-            <Sprout size={32} />
-          </div>
-          <h1 className="text-3xl font-bold tracking-tight text-white font-outfit">SmartSeason</h1>
-          <p className="mt-2 text-sm text-slate-300">Agricultural Field Monitoring System</p>
+        <div className="mb-10 flex flex-col items-center text-center">
+          <motion.div 
+            initial={{ y: -20 }}
+            animate={{ y: 0 }}
+            className="mb-6 flex h-20 w-20 items-center justify-center rounded-[2rem] bg-forest-500 text-white shadow-premium"
+          >
+            <Sprout size={40} />
+          </motion.div>
+          <h1 className="text-4xl font-extrabold tracking-tight text-white">SmartSeason</h1>
+          <p className="mt-2 text-sm font-medium tracking-wide text-forest-200/60 uppercase">Ecosystem Intelligence</p>
         </div>
 
-        <form className="space-y-5" onSubmit={handleSubmit}>
-          <div className="space-y-1">
-            <label htmlFor="email" className="block text-xs font-semibold uppercase tracking-wider text-slate-400">
-              Email Address
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          <div className="space-y-2">
+            <label htmlFor="email" className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+              Identity Portal
             </label>
-            <div className="relative">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">
+            <div className="relative group">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-500 group-focus-within:text-forest-400 transition-colors">
                 <Mail size={18} />
               </span>
               <input
@@ -79,18 +84,18 @@ const Login = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                placeholder="name@company.com"
-                className="w-full rounded-xl border border-white/10 bg-white/5 py-2.5 pl-10 pr-4 text-white outline-none ring-emerald-500/50 transition-all focus:border-emerald-500 focus:bg-white/10 focus:ring-4"
+                placeholder="Access Email"
+                className="w-full rounded-2xl border border-white/5 bg-white/5 py-3.5 pl-12 pr-4 text-white outline-none ring-forest-500/20 transition-all placeholder:text-slate-600 focus:bg-white/10 focus:ring-4"
               />
             </div>
           </div>
 
-          <div className="space-y-1">
-            <label htmlFor="password" className="block text-xs font-semibold uppercase tracking-wider text-slate-400">
-              Password
+          <div className="space-y-2">
+            <label htmlFor="password" className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+              Validation Key
             </label>
-            <div className="relative">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">
+            <div className="relative group">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-500 group-focus-within:text-forest-400 transition-colors">
                 <Lock size={18} />
               </span>
               <input
@@ -101,46 +106,45 @@ const Login = () => {
                 onChange={handleChange}
                 required
                 placeholder="••••••••"
-                className="w-full rounded-xl border border-white/10 bg-white/5 py-2.5 pl-10 pr-4 text-white outline-none ring-emerald-500/50 transition-all focus:border-emerald-500 focus:bg-white/10 focus:ring-4"
+                className="w-full rounded-2xl border border-white/5 bg-white/5 py-3.5 pl-12 pr-4 text-white outline-none ring-forest-500/20 transition-all placeholder:text-slate-600 focus:bg-white/10 focus:ring-4"
               />
             </div>
           </div>
 
-          {error ? (
-            <motion.div 
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="rounded-lg bg-red-500/10 p-3 text-sm text-red-400 border border-red-500/20 text-center"
-            >
-              {error}
-            </motion.div>
-          ) : null}
+          <AnimatePresence>
+            {error && (
+              <motion.div 
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="overflow-hidden"
+              >
+                <div className="rounded-xl bg-red-400/10 p-3 text-xs font-bold text-red-400 border border-red-400/20 text-center">
+                  {error}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <button
             type="submit"
             disabled={loading}
-            className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-emerald-600 px-4 py-3 font-semibold text-white transition-all hover:bg-emerald-500 active:scale-[0.98] disabled:opacity-50"
+            className="group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-2xl bg-forest-600 py-4 font-bold text-white shadow-premium transition-all hover:bg-forest-500 active:scale-[0.98] disabled:opacity-50"
           >
             {loading ? (
-              <span className="flex items-center gap-2">
-                <svg className="h-5 w-5 animate-spin text-white" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                </svg>
-                Processing...
-              </span>
+              <RefreshCw size={20} className="animate-spin" />
             ) : (
               <>
-                Sign In
-                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                Initialize Access
+                <ArrowRight size={20} className="transition-transform group-hover:translate-x-1" />
               </>
             )}
           </button>
         </form>
         
-        <div className="mt-8 border-t border-white/5 pt-6 text-center">
-          <p className="text-xs text-slate-500">
-            &copy; 2026 SmartSeason. Optimized Field Monitoring.
+        <div className="mt-10 pt-6 text-center">
+          <p className="text-[10px] font-bold text-slate-500 tracking-widest uppercase">
+            &copy; 2026 SmartSeason Labs
           </p>
         </div>
       </motion.div>

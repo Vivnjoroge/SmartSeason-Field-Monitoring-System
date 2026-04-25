@@ -71,8 +71,8 @@ const CreateField = () => {
           <ArrowLeft size={24} />
         </Link>
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">Initialize Field</h1>
-          <p className="mt-1 text-xs font-bold uppercase tracking-widest text-slate-400">Agricultural Asset Registration</p>
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">Add New Field</h1>
+          <p className="mt-1 text-xs font-bold uppercase tracking-widest text-slate-400">Enter field details below</p>
         </div>
       </div>
 
@@ -80,25 +80,25 @@ const CreateField = () => {
         <form onSubmit={handleSubmit} className="space-y-8">
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
             <InputField 
-              label="Field Identifier" 
+              label="Field Name" 
               name="name" 
-              placeholder="e.g. North Plateau A1"
+              placeholder="e.g. North Field"
               value={formData.name} 
               onChange={handleChange} 
               icon={<Plus size={18} />}
             />
 
             <InputField 
-              label="Crop Classification" 
+              label="Crop Type" 
               name="crop_type" 
-              placeholder="e.g. Winter Wheat"
+              placeholder="e.g. Corn"
               value={formData.crop_type} 
               onChange={handleChange} 
               icon={<Sprout size={18} />}
             />
 
             <InputField
-              label="Initial Planting"
+              label="Planting Date"
               name="planting_date"
               type="date"
               value={formData.planting_date}
@@ -108,7 +108,7 @@ const CreateField = () => {
 
             <div className="space-y-2">
               <label htmlFor="stage" className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
-                Current Lifecycle
+                Current Stage
               </label>
               <div className="relative group">
                 <select
@@ -132,7 +132,7 @@ const CreateField = () => {
 
           <div className="space-y-2">
             <label htmlFor="agent_id" className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
-              Assign Field Custodian
+              Assign to Agent
             </label>
             <div className="relative group">
               <select
@@ -143,7 +143,7 @@ const CreateField = () => {
                 required
                 className="w-full appearance-none rounded-2xl border-none bg-slate-100/50 px-5 py-3.5 text-sm font-bold text-slate-700 outline-none ring-forest-500/10 transition-all focus:bg-white focus:ring-4"
               >
-                <option value="">Select an authorized agent</option>
+                <option value="">Select an agent</option>
                 {agents.map((agent) => (
                   <option key={agent.id} value={agent.id}>
                     {agent.name} — {agent.email}
@@ -178,7 +178,7 @@ const CreateField = () => {
               <RefreshCw size={22} className="animate-spin" />
             ) : (
               <>
-                Register Operational Asset
+                Save Field
                 <ArrowLeft size={20} className="rotate-180 transition-transform group-hover:translate-x-1" />
               </>
             )}

@@ -24,13 +24,22 @@ SmartSeason is a premium, full-stack agricultural monitoring platform designed t
 
 ## ⚖️ Field Status Logic
 
-The system automatically computes the operational status of every field to help coordinators prioritize their attention:
+The system automatically computes the operational status of every field dynamically on the backend. This ensures that "At Risk" alerts are triggered by the passage of time (e.g., inactivity), even if no new data is entered into the database.
 
-| Status | Logic / Condition |
-| :--- | :--- |
-| **✅ Active** | The default state for fields that are progressing normally and have been updated recently. |
-| **⚠️ At Risk** | Triggered if a field exceeds **90 days** since planting (indicating slow progress) OR if **14 days** have passed without any update from the agent (stale data). |
-| **🏁 Completed** | Automatically assigned once the field stage is set to **"Harvested"**. |
+### Status Definitions
+
+| Status | Logic / Condition | UI indicator |
+| :--- | :--- | :--- |
+| **✅ Active** | Default state for fields with recent updates. | Forest Green |
+| **⚠️ At Risk** | Triggered if `days_since_planting > 90` OR `days_since_update > 14`. | Amber/Gold |
+| **🏁 Completed** | Automatically set when the field stage is `Harvested`. | Slate Grey |
+
+### Technical Implementation
+
+- **Location**: Centralized in `backend/src/services/fieldService.js` under the `computeStatus` function.
+- **Dynamic Calculation**: Status is **not** stored as a static column in the database. Instead, the backend enriches the field data during API calls. This ensures that a field can transition from "Active" to "At Risk" automatically based on the current date, without needing manual updates.
+- **Data Points**: The logic utilizes `planting_date` from the `fields` table and the `created_at` timestamp of the latest entry in the `field_updates` table.
+
 
 ---
 

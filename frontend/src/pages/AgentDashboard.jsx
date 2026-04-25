@@ -113,8 +113,8 @@ const AgentDashboard = () => {
     >
       <div className="mb-10 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 leading-none">Agent Command</h1>
-          <p className="mt-2 text-slate-500 font-medium">Monitor and sync lifecycle stages for your assigned field assets.</p>
+          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 leading-none">My Fields</h1>
+          <p className="mt-2 text-slate-500 font-medium">Keep your assigned fields up to date.</p>
         </div>
       </div>
 
@@ -141,7 +141,7 @@ const AgentDashboard = () => {
           variants={itemVariants}
         />
         <SummaryCard
-          label="Optimal"
+          label="Healthy"
           value={summary.active}
           icon={<LayoutDashboard size={20} />}
           color="text-emerald-700"
@@ -149,7 +149,7 @@ const AgentDashboard = () => {
           variants={itemVariants}
         />
         <SummaryCard
-          label="Issues"
+          label="At Risk"
           value={summary.atRisk}
           icon={<AlertTriangle size={20} />}
           color="text-amber-700"
@@ -157,7 +157,7 @@ const AgentDashboard = () => {
           variants={itemVariants}
         />
         <SummaryCard
-          label="History"
+          label="Completed"
           value={summary.completed}
           icon={<CheckCircle2 size={20} />}
           color="text-slate-600"
@@ -168,14 +168,14 @@ const AgentDashboard = () => {
 
       <motion.div variants={itemVariants} className="space-y-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between px-2">
-          <h2 className="text-2xl font-bold text-slate-900">Priority Actions</h2>
+          <h2 className="text-2xl font-bold text-slate-900">Updates Needed</h2>
           <div className="relative group">
             <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 group-focus-within:text-forest-600 transition-colors">
               <Search size={16} />
             </span>
             <input
               type="text"
-              placeholder="Find field identifier..."
+              placeholder="Search for a field..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full sm:w-64 rounded-xl border-none bg-slate-100/50 py-2.5 pl-10 pr-4 text-sm font-medium outline-none transition-all focus:bg-white focus:ring-4 focus:ring-forest-500/10"
@@ -188,11 +188,11 @@ const AgentDashboard = () => {
             <table className="w-full border-collapse text-left">
               <thead>
                 <tr className="border-b border-slate-50 bg-slate-50/30">
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">Field Asset</th>
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">Field Name</th>
                   <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">Current Stage</th>
                   <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">Status</th>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">Action Protocol</th>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-400 text-right">Intelligence</th>
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">Update Stage</th>
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-400 text-right">Details</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50">
@@ -238,7 +238,7 @@ const AgentDashboard = () => {
                           {updatingId === field.id ? (
                             <RefreshCw size={12} className="animate-spin" />
                           ) : (
-                            'SYNC'
+                            'Update'
                           )}
                         </button>
                       </div>
@@ -262,8 +262,8 @@ const AgentDashboard = () => {
               <div className="h-16 w-16 rounded-3xl bg-slate-50 flex items-center justify-center text-slate-300">
                 <Search size={32} />
               </div>
-              <h3 className="mt-4 font-bold text-slate-900 text-lg">Empty Queue</h3>
-              <p className="text-sm text-slate-400">No active field assignments match your search.</p>
+              <h3 className="mt-4 font-bold text-slate-900 text-lg">No Fields Found</h3>
+              <p className="text-sm text-slate-400">You don't have any matching fields right now.</p>
             </div>
           )}
         </div>

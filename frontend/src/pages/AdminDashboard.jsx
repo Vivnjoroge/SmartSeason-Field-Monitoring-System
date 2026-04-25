@@ -88,8 +88,8 @@ const AdminDashboard = () => {
       {/* Executive Header */}
       <div className="mb-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 leading-tight">Project Overview</h1>
-          <p className="mt-2 text-slate-500 font-medium tracking-tight">Real-time status of all digital agricultural assets.</p>
+          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 leading-tight">Field Dashboard</h1>
+          <p className="mt-2 text-slate-500 font-medium tracking-tight">Overview of all field progress and status.</p>
         </div>
         <div className="flex items-center gap-3">
           <Link
@@ -97,7 +97,7 @@ const AdminDashboard = () => {
             className="flex h-11 items-center gap-2 rounded-xl bg-forest-800 px-6 text-sm font-semibold text-white shadow-soft transition-all hover:bg-forest-700 hover:shadow-premium active:scale-95"
           >
             <Plus size={18} />
-            Initialize Field
+            Add New Field
           </Link>
         </div>
       </div>
@@ -105,7 +105,7 @@ const AdminDashboard = () => {
       {/* Modern Insight Cards */}
       <div className="mb-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <InsightCard
-          label="Total Managed"
+          label="Total Fields"
           value={summary.total}
           icon={<Layers size={20} />}
           trend="All Fields"
@@ -114,7 +114,7 @@ const AdminDashboard = () => {
           variants={itemVariants}
         />
         <InsightCard
-          label="Optimal Status"
+          label="Healthy"
           value={summary.active}
           icon={<CheckCircle2 size={20} />}
           trend="Progressing"
@@ -123,7 +123,7 @@ const AdminDashboard = () => {
           variants={itemVariants}
         />
         <InsightCard
-          label="Attention Required"
+          label="Needs Help"
           value={summary.atRisk}
           icon={<AlertTriangle size={20} />}
           trend="Delayed"
@@ -145,14 +145,14 @@ const AdminDashboard = () => {
       {/* Simplified Inventory */}
       <motion.div variants={itemVariants} className="space-y-6">
         <div className="flex items-center justify-between px-2">
-          <h2 className="text-2xl font-bold text-slate-900">Inventory Matrix</h2>
+          <h2 className="text-2xl font-bold text-slate-900">All Fields</h2>
           <div className="relative group">
             <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 group-focus-within:text-forest-600 transition-colors">
               <Search size={16} />
             </span>
             <input
               type="text"
-              placeholder="Search matrix..."
+              placeholder="Search for a field..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-64 rounded-xl border-none bg-slate-100/50 py-2.5 pl-10 pr-4 text-sm font-medium outline-none transition-all placeholder:text-slate-400 focus:bg-white focus:ring-4 focus:ring-forest-500/10"
@@ -164,11 +164,11 @@ const AdminDashboard = () => {
           <table className="min-w-full text-left">
             <thead className="bg-slate-50/50 text-[10px] font-bold uppercase tracking-[0.1em] text-slate-400">
               <tr>
-                <th className="px-8 py-5">Field Identity</th>
-                <th className="px-8 py-5">Classification</th>
+                <th className="px-8 py-5">Field Name</th>
+                <th className="px-8 py-5">Crop</th>
                 <th className="px-8 py-5">Stage</th>
-                <th className="px-8 py-5">Operational Status</th>
-                <th className="px-8 py-5">Custodian</th>
+                <th className="px-8 py-5">Status</th>
+                <th className="px-8 py-5">Agent</th>
                 <th className="px-8 py-5 text-right">Details</th>
               </tr>
             </thead>

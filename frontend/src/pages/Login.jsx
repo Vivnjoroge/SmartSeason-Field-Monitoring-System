@@ -34,7 +34,7 @@ const Login = () => {
         navigate('/dashboard/agent');
       }
     } catch (apiError) {
-      setError(apiError.response?.data?.message || 'Information mismatch. Please verify credentials.');
+      setError(apiError.response?.data?.message || 'Login details are incorrect. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -65,13 +65,13 @@ const Login = () => {
             <Sprout size={40} />
           </motion.div>
           <h1 className="text-4xl font-extrabold tracking-tight text-white">SmartSeason</h1>
-          <p className="mt-2 text-sm font-medium tracking-wide text-forest-200/60 uppercase">Ecosystem Intelligence</p>
+          <p className="mt-2 text-sm font-medium tracking-wide text-forest-200/60 uppercase">Track your fields easily</p>
         </div>
 
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-2">
             <label htmlFor="email" className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
-              Identity Portal
+              Email Address
             </label>
             <div className="relative group">
               <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-500 group-focus-within:text-forest-400 transition-colors">
@@ -84,7 +84,7 @@ const Login = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                placeholder="Access Email"
+                placeholder="Enter your email"
                 className="w-full rounded-2xl border border-white/5 bg-white/5 py-3.5 pl-12 pr-4 text-white outline-none ring-forest-500/20 transition-all placeholder:text-slate-600 focus:bg-white/10 focus:ring-4"
               />
             </div>
@@ -92,7 +92,7 @@ const Login = () => {
 
           <div className="space-y-2">
             <label htmlFor="password" className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
-              Validation Key
+              Password
             </label>
             <div className="relative group">
               <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-500 group-focus-within:text-forest-400 transition-colors">
@@ -135,7 +135,7 @@ const Login = () => {
               <RefreshCw size={20} className="animate-spin" />
             ) : (
               <>
-                Initialize Access
+                Sign In
                 <ArrowRight size={20} className="transition-transform group-hover:translate-x-1" />
               </>
             )}

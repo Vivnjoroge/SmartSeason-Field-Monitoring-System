@@ -36,7 +36,7 @@ const FieldDetail = () => {
       setStage(response.data.stage);
       setError('');
     } catch (apiError) {
-      setError(apiError.response?.data?.message || 'Failed to load intelligence report');
+      setError(apiError.response?.data?.message || 'Could not load field details.');
     } finally {
       setLoading(false);
     }
@@ -110,7 +110,7 @@ const FieldDetail = () => {
         </Link>
         <div>
           <h1 className="text-4xl font-extrabold tracking-tight text-slate-900">{field.name}</h1>
-          <p className="mt-2 text-slate-500 tracking-wide uppercase text-[10px] font-bold">Field Asset Identification: {field.id.toString().padStart(4, '0')}</p>
+          <p className="mt-2 text-slate-500 tracking-wide uppercase text-[10px] font-bold">Field ID: {field.id.toString().padStart(4, '0')}</p>
         </div>
       </div>
 
@@ -121,15 +121,15 @@ const FieldDetail = () => {
             <div className="bg-slate-50/50 px-10 py-6 border-b border-slate-50 flex items-center justify-between">
               <h2 className="flex items-center gap-3 text-lg font-bold text-slate-900">
                 <Activity size={20} className="text-forest-600" />
-                Intelligence Summary
+                Field Overview
               </h2>
               <StatusBadge status={field.status} />
             </div>
             <div className="p-10 grid grid-cols-1 gap-8 sm:grid-cols-2">
-              <StatItem icon={<Sprout size={24} className="text-forest-500" />} label="Plant Classification" value={field.crop_type} />
-              <StatItem icon={<Calendar size={24} className="text-blue-500" />} label="Initialization Date" value={new Date(field.planting_date).toLocaleDateString(undefined, { dateStyle: 'long' })} />
-              <StatItem icon={<Activity size={24} className="text-amber-500" />} label="Active Status" value={field.stage} />
-              <StatItem icon={<UserIcon size={24} className="text-slate-500" />} label="Field Custodian" value={field.agent_name || 'Awaiting Assignment'} />
+              <StatItem icon={<Sprout size={24} className="text-forest-500" />} label="Crop Type" value={field.crop_type} />
+              <StatItem icon={<Calendar size={24} className="text-blue-500" />} label="Planting Date" value={new Date(field.planting_date).toLocaleDateString(undefined, { dateStyle: 'long' })} />
+              <StatItem icon={<Activity size={24} className="text-amber-500" />} label="Current Stage" value={field.stage} />
+              <StatItem icon={<UserIcon size={24} className="text-slate-500" />} label="Agent" value={field.agent_name || 'Awaiting Assignment'} />
             </div>
           </div>
 
@@ -137,12 +137,12 @@ const FieldDetail = () => {
           <div className="space-y-8">
             <h2 className="flex items-center gap-3 text-2xl font-bold text-slate-900 px-2">
               <Clock size={24} className="text-forest-600" />
-              Monitoring Log Feed
+              Activity History
             </h2>
             
             <div className="relative space-y-8 before:absolute before:inset-0 before:ml-7 before:h-full before:w-0.5 before:bg-slate-100">
               {field.updates.length === 0 ? (
-                <div className="ml-16 py-10 italic text-slate-400 font-medium">No intelligence activity recorded for this asset.</div>
+                <div className="ml-16 py-10 italic text-slate-400 font-medium">No activity recorded for this field yet.</div>
               ) : (
                 field.updates.map((update, idx) => (
                   <motion.div 
@@ -197,10 +197,10 @@ const FieldDetail = () => {
               >
                 {/* Stage Sync Control */}
                 <div className="rounded-[2.5rem] border border-slate-100 bg-white p-8 shadow-soft">
-                  <h3 className="mb-6 text-xl font-bold text-slate-900">Precision Sync</h3>
+                  <h3 className="mb-6 text-xl font-bold text-slate-900">Update Stage</h3>
                   <form onSubmit={handleUpdateStage} className="space-y-6">
                     <div className="space-y-2">
-                       <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Lifecycle Stage</p>
+                       <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Current Stage</p>
                        <div className="relative group">
                           <select
                             value={stage}
@@ -223,24 +223,24 @@ const FieldDetail = () => {
                       className="group flex w-full items-center justify-center gap-3 rounded-2xl bg-forest-800 py-4 text-sm font-bold text-white shadow-soft transition-all hover:bg-forest-700 active:scale-95 disabled:bg-slate-100 disabled:text-slate-300"
                     >
                       <Save size={20} className="transition-transform group-hover:scale-110" />
-                      Synchronize Stage
+                      Update Stage
                     </button>
                   </form>
                 </div>
 
                 {/* Observation Archive */}
                 <div className="rounded-[2.5rem] border border-slate-100 bg-white p-8 shadow-soft">
-                  <h3 className="mb-6 text-xl font-bold text-slate-900">Archive Observation</h3>
+                  <h3 className="mb-6 text-xl font-bold text-slate-900">Add a Note</h3>
                   <form onSubmit={handleAddNote} className="space-y-6">
                     <div className="space-y-2">
-                       <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Observation Data</p>
+                       <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Your Note</p>
                        <textarea
                           value={note}
                           onChange={(event) => setNote(event.target.value)}
                           required
                           rows={6}
                           className="w-full rounded-2xl border-none bg-slate-100/50 p-5 text-sm font-medium outline-none ring-forest-500/10 transition-all placeholder:text-slate-400 focus:bg-white focus:ring-4"
-                          placeholder="Document key physiological indicators or environmental stressors..."
+                          placeholder="Type your field notes here..."
                        />
                     </div>
                     <button
@@ -249,7 +249,7 @@ const FieldDetail = () => {
                       className="group flex w-full items-center justify-center gap-3 rounded-2xl bg-slate-900 py-4 text-sm font-bold text-white shadow-soft transition-all hover:bg-slate-800 active:scale-95 disabled:bg-slate-100 disabled:text-slate-300"
                     >
                       <Send size={20} className="transition-transform group-hover:translate-x-1" />
-                      Archive Intelligence
+                      Save Note
                     </button>
                   </form>
                 </div>
@@ -260,9 +260,9 @@ const FieldDetail = () => {
               <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-[2rem] bg-white text-forest-300 shadow-soft">
                  <Activity size={36} />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 tracking-tight">Observer Access Only</h3>
+              <h3 className="text-xl font-bold text-slate-900 tracking-tight">View Only</h3>
               <p className="mt-4 text-sm leading-relaxed text-slate-500 font-medium px-2">
-                Your privileges are restricted to intelligence review. Monitoring updates are reserved for the assigned Field Custodian.
+                You can view this field's details. Only the assigned agent can make updates.
               </p>
             </div>
           )}

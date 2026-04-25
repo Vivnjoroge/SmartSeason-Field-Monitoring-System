@@ -25,9 +25,16 @@ const computeStatus = (field, lastUpdateDate) => {
     : plantedDate;
   const daysSinceUpdate = daysBetween(effectiveUpdateDate, today);
 
-  if (plantedDaysAgo > 90 || daysSinceUpdate > 14) {
+  // At Risk if:
+  // 1. Over 90 days since planting
+  // 2. Over 14 days without an update
+  // 3. Staying in 'Ready' stage for more than 7 days (harvest delay)
+  const isReadyStale = field.stage === 'Ready' && daysSinceUpdate > 7;
+
+  if (plantedDaysAgo > 90 || daysSinceUpdate > 14 || isReadyStale) {
     return 'At Risk';
   }
+
 
   return 'Active';
 };

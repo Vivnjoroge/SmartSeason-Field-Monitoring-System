@@ -60,12 +60,32 @@ const createField = async (req, res, next) => {
       return res.status(400).json({ message: 'Invalid stage' });
     }
 
+    // 1. Validate: Planting date cannot be in the future
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (new Date(planting_date) > today) {
+      return res.status(400).json({ message: 'Planting date cannot be in the future' });
+    }
+
+    // 2. Validate: Assigned user must exist and be an 'agent'
+    const userResult = await db.query('SELECT role FROM users WHERE id = $1', [agent_id]);
+    const assignedUser = userResult.rows[0];
+
+    if (!assignedUser) {
+      return res.status(400).json({ message: 'Assigned agent does not exist' });
+    }
+
+    if (assignedUser.role !== 'agent') {
+      return res.status(400).json({ message: 'Fields can only be assigned to users with the Agent role' });
+    }
+
     const result = await db.query(
       `INSERT INTO fields (name, crop_type, planting_date, stage, agent_id)
        VALUES ($1, $2, $3, $4, $5)
        RETURNING id, name, crop_type, planting_date, stage, agent_id, created_at`,
       [name, crop_type, planting_date, stage, agent_id]
     );
+
 
     const field = result.rows[0];
     const enrichedField = enrichFieldWithStatus(field, null); // Last update date is null for new fields
@@ -172,6 +192,11 @@ const addNote = async (req, res, next) => {
     if (!note || !note.trim()) {
       return res.status(400).json({ message: 'Note is required' });
     }
+
+    if (note.length > 1000) {
+      return res.status(400).json({ message: 'Note is too long (max 1000 characters)' });
+    }
+
 
     const ownershipResult = await db.query(
       'SELECT id, agent_id FROM fields WHERE id = $1',
